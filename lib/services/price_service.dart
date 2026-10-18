@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 
 import '../data/price_tick.dart';
 
@@ -38,6 +39,12 @@ class PriceService {
 
   bool get isRunning => _timer?.isActive ?? false;
 
+  /// Future + async/await: giả lập gọi mạng mất 1 giây để lấy giá ban đầu
+  Future<Map<String, double>> loadInitialPrices() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return Map.of(_prices);
+  }
+
   void start() {
     if (isRunning || _controller.isClosed) return;
     _timer = Timer.periodic(_interval, (_) => _tick());
@@ -68,5 +75,6 @@ class PriceService {
   Future<void> dispose() async {
     stop();
     await _controller.close();
+    debugPrint('PriceService disposed');
   }
 }
