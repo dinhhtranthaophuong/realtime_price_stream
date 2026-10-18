@@ -24,6 +24,18 @@ class PriceService {
   Timer? _timer;
 
   Stream<PriceTick> get stream => _controller.stream;
+
+  /// where: lọc theo mã
+  Stream<PriceTick> watch(String symbol) =>
+      stream.where((t) => t.symbol == symbol);
+
+  /// map: chuyển PriceTick -> double
+  Stream<double> priceOf(String symbol) => watch(symbol).map((t) => t.price);
+
+  /// where: chỉ lấy các lần biến động mạnh
+  Stream<PriceTick> bigMoves({double thresholdPercent = 0.3}) =>
+      stream.where((t) => t.changePercent.abs() >= thresholdPercent);
+
   bool get isRunning => _timer?.isActive ?? false;
 
   void start() {
