@@ -13,7 +13,7 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  final _service = PriceService();
+  final _service = PriceService(live: true);
   final _searchInput = StreamController<String>();
   late final StreamSubscription<String> _searchSub;
   late final Future<Map<String, double>> _initial;
